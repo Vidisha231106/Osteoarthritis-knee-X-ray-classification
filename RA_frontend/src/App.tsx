@@ -2,11 +2,12 @@ import { useState } from 'react';
 import { Activity } from 'lucide-react';
 import TabNavigation from './components/TabNavigation';
 import HomePage from './components/HomePage';
-import AnalyzePage from './components/AnalyzePage';
-import DetailedAnalysisPage from './components/DetailedAnalysisPage';
+import CoralAnalysisPage from './components/CoralAnalysisPage';
+import ResNetAnalysisPage from './components/ResNetAnalysisPage';
+import ComparisonPage from './components/ComparisonPage';
 
 function App() {
-  const [activeTab, setActiveTab] = useState<'home' | 'analyze' | 'details'>('home');
+  const [activeTab, setActiveTab] = useState<'home' | 'coral' | 'resnet' | 'compare'>('home');
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-teal-50 via-blue-50 to-cyan-50">
@@ -30,8 +31,9 @@ function App() {
         {/* Tab Content */}
         <div className="mb-12">
           {activeTab === 'home' && <HomePage />}
-          {activeTab === 'analyze' && <AnalyzePage />}
-          {activeTab === 'details' && <DetailedAnalysisPage />}
+          {activeTab === 'coral' && <CoralAnalysisPage />}
+          {activeTab === 'resnet' && <ResNetAnalysisPage />}
+          {activeTab === 'compare' && <ComparisonPage />}
         </div>
 
         {/* Footer */}
@@ -39,7 +41,7 @@ function App() {
           <p className="mb-2">Medical image analysis powered by advanced AI technology</p>
           <p>Always consult with healthcare professionals for medical decisions</p>
           <p className="mt-4 text-xs text-gray-400">
-            © 2026 Osteoarthritis Knee X-ray Classifier • EfficientNet-B0 + CORAL Ordinal Regression
+            © 2026 Osteoarthritis Knee X-ray Classifier • Dual Model: CORAL + ResNet50
           </p>
         </footer>
       </div>

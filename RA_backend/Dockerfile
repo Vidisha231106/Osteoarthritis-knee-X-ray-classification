@@ -5,6 +5,7 @@ FROM python:3.11-slim
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
 ENV PORT=5000
+ENV TF_CPP_MIN_LOG_LEVEL=2
 
 # Set work directory
 WORKDIR /app
@@ -32,11 +33,13 @@ RUN echo "=== Checking file structure ===" && \
     ls -la /app/RA_Ordinal_Classification/src/ 2>&1 || echo "src folder missing!" && \
     echo "=== Checking for model.py ===" && \
     ls -la /app/RA_Ordinal_Classification/src/model.py 2>&1 || echo "model.py missing!" && \
-    echo "=== Checking for .pth model ===" && \
-    ls -la /app/RA_Ordinal_Classification/*.pth 2>&1 || echo "Model file missing!"
+    echo "=== Checking for CORAL .pth model ===" && \
+    ls -la /app/RA_Ordinal_Classification/*.pth 2>&1 || echo "CORAL model file missing!" && \
+    echo "=== Checking for ResNet50 .h5 model ===" && \
+    ls -la /app/RA_Ordinal_Classification/*.h5 2>&1 || echo "ResNet50 model file missing!"
 
 # Expose port (Render will override with PORT env var)
 EXPOSE $PORT
 
 # Use gunicorn for production
-CMD gunicorn --bind 0.0.0.0:$PORT --workers 1 --threads 4 --timeout 120 app:app
+CMD gunicorn --bind 0.0.0.0:$PORT --workers 1 --threads 4 --timeout 180 app:app

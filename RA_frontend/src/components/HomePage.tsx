@@ -1,4 +1,4 @@
-import { Activity, CheckCircle2, Shield, Zap } from 'lucide-react';
+import { Activity, CheckCircle2, Zap, Layers, Network, GitCompare } from 'lucide-react';
 
 export default function HomePage() {
   return (
@@ -18,8 +18,41 @@ export default function HomePage() {
         </p>
         
         <p className="text-lg text-gray-500 max-w-2xl mx-auto">
-          Our deep learning model analyzes knee X-ray images to classify osteoarthritis using the Kellgren-Lawrence grading system, providing clinicians with fast, reliable support.
+          Compare two different deep learning approaches for knee X-ray classification: CORAL ordinal regression and ResNet50 multiclass classification.
         </p>
+      </div>
+
+      {/* Dual Model Highlight */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
+        <div className="bg-gradient-to-br from-teal-500 to-cyan-500 rounded-xl p-6 text-white shadow-lg">
+          <div className="flex items-center gap-3 mb-4">
+            <Layers className="w-8 h-8" />
+            <h3 className="text-xl font-bold">CORAL Model</h3>
+          </div>
+          <p className="text-teal-100 mb-4">
+            EfficientNet-B0 with CORAL ordinal regression. Understands that KL grades are ordered (0 → 1 → 2 → 3 → 4) and produces more consistent predictions.
+          </p>
+          <ul className="text-sm text-teal-100 space-y-1">
+            <li>• Ordinal regression approach</li>
+            <li>• Cumulative probability thresholds</li>
+            <li>• Penalizes distant errors more than adjacent</li>
+          </ul>
+        </div>
+
+        <div className="bg-gradient-to-br from-purple-500 to-indigo-500 rounded-xl p-6 text-white shadow-lg">
+          <div className="flex items-center gap-3 mb-4">
+            <Network className="w-8 h-8" />
+            <h3 className="text-xl font-bold">ResNet50 Model</h3>
+          </div>
+          <p className="text-purple-100 mb-4">
+            ResNet50 with standard multiclass classification. Treats each KL grade as an independent class using softmax activation.
+          </p>
+          <ul className="text-sm text-purple-100 space-y-1">
+            <li>• Standard multiclass classification</li>
+            <li>• Softmax probability distribution</li>
+            <li>• Deep residual network backbone</li>
+          </ul>
+        </div>
       </div>
 
       {/* Features Grid */}
@@ -32,21 +65,19 @@ export default function HomePage() {
             Fast Analysis
           </h3>
           <p className="text-gray-600 leading-relaxed">
-            Get results in seconds with our optimized EfficientNet-B0 model using 
-            CORAL ordinal regression for precise stage classification.
+            Get results in seconds with our optimized models. Both provide quick, reliable predictions.
           </p>
         </div>
 
         <div className="bg-white rounded-xl p-6 shadow-lg hover:shadow-xl transition-shadow duration-300 border border-gray-100">
           <div className="bg-gradient-to-br from-purple-500 to-pink-500 w-12 h-12 rounded-lg flex items-center justify-center mb-4">
-            <Shield className="w-6 h-6 text-white" />
+            <GitCompare className="w-6 h-6 text-white" />
           </div>
           <h3 className="text-xl font-semibold text-gray-800 mb-2">
-            Clinically Meaningful
+            Model Comparison
           </h3>
           <p className="text-gray-600 leading-relaxed">
-            CORAL ordinal regression respects disease progression, penalizing 
-            adjacent stage errors less than distant ones for clinical relevance.
+            Compare predictions from both models side-by-side to understand how different approaches affect results.
           </p>
         </div>
 
@@ -84,9 +115,9 @@ export default function HomePage() {
             <div className="bg-cyan-100 text-cyan-600 w-12 h-12 rounded-full flex items-center justify-center text-xl font-bold mx-auto mb-4">
               2
             </div>
-            <h3 className="text-lg font-semibold text-gray-800 mb-2">AI Analysis</h3>
+            <h3 className="text-lg font-semibold text-gray-800 mb-2">Choose Your Model</h3>
             <p className="text-gray-600">
-              Our model analyzes radiographic features (osteophytes, joint space narrowing, sclerosis) and assigns a Kellgren-Lawrence grade.
+              Select CORAL for ordinal regression, ResNet50 for multiclass, or compare both models together.
             </p>
           </div>
 
@@ -96,7 +127,7 @@ export default function HomePage() {
             </div>
             <h3 className="text-lg font-semibold text-gray-800 mb-2">Get Results</h3>
             <p className="text-gray-600">
-              Review the predicted stage, severity level, confidence score, and detailed explanation.
+              Review the predicted grade, severity level, confidence score, and detailed explanation.
             </p>
           </div>
         </div>
