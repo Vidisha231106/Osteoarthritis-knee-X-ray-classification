@@ -25,158 +25,131 @@ RA_detection/
     │   └── ...
     ├── package.json
     └── vite.config.ts
+# Osteoarthritis Knee X‑ray Classification (RA_detection)
+
+Comprehensive full‑stack repository for classifying knee X‑ray images using two AI models: a PyTorch CORAL ordinal model and a Keras ResNet50 multiclass model. The project contains a Flask backend and a React + TypeScript frontend.
+
+**This README** summarizes the project, the two models, how to run locally (both models), deployment notes (memory‑constrained environments), branch strategy, and troubleshooting tips.
+
+**Project layout (top-level)**
+
+```
+RA_detection/
+├── RA_backend/                         # Flask API server, models, Dockerfile
+│   ├── app.py                          # Main Flask application & endpoints
+│   ├── requirements.txt
+│   ├── Dockerfile
+│   ├── RA_Ordinal_Classification/     # CORAL ordinal model (PyTorch)
+│   │   ├── efficientnet_ordinal.pth   # Trained PyTorch model (ordinal)
+│   │   └── src/                       # training/eval utilities
+│   └── model.weights.h5               # ResNet50 weights (Keras) OR in RA_Ordinal_Classification
+├── RA_frontend/                        # React + TypeScript + Vite frontend
+│   └── src/
+└── README.md                           # <-- this file
 ```
 
-## Quick Start
+**Branches**
+- `main` — deployment‑safe branch: ResNet50 is optional (controlled by `ENABLE_RESNET=false`) to avoid OOM on tiny hosting plans.
+- `both_models` — development branch: both CORAL (PyTorch) and ResNet50 (TensorFlow/Keras) load unconditionally for local development (not intended for low‑RAM deployment).
 
-### 1. Start Backend Server
+**High level**
+- Backend: Flask API exposing endpoints for CORAL, ResNet50, and comparison.
+- Frontend: React + TypeScript app with 4 views (Home, CORAL Analysis, ResNet50 Analysis, Compare Models).
+- Models:
+  - CORAL ordinal regression model using EfficientNet backbone implemented in PyTorch (file: `RA_backend/RA_Ordinal_Classification/efficientnet_ordinal.pth`). Produces ordinal outputs over 5 stages (0..4).
+  - ResNet50-based multiclass model implemented with TensorFlow/Keras (weights file: `RA_backend/model.weights.h5`). Produces softmax probabilities for the same 5 classes.
 
-```bash
-# Navigate to backend folder
+**Important system requirements**
+- Recommended Python: 3.11 (some scientific packages are incompatible with Python 3.13).
+- Flask 3.x, PyTorch (CPU), and TensorFlow CPU (2.15.0 tested). If running both models locally you need both frameworks installed — memory usage will be significantly higher.
+
+**Environment variables (backend)**
+- `PORT` — port the Flask app listens on (default: `5000`).
+- `ENABLE_RESNET` — set to `false` on memory‑constrained deployments to skip loading the ResNet50 model. `main` defaults this to `false` in `render.yaml` for Render free tier.
+
+**Local development (both models)**
+1. Ensure Python 3.11 is active.
+2. Create and activate virtualenv:
+
+```powershell
 cd RA_backend
+python -m venv .venv
+.venv\\Scripts\\activate
+```
 
-# Create virtual environment (first time only)
-python -m venv venv
+3. Install backend dependencies (this repo pins tested versions in `RA_backend/requirements.txt`):
 
-# Activate virtual environment
-# Windows:
-venv\Scripts\activate
-# Mac/Linux:
-source venv/bin/activate
-
-# Install dependencies (first time only)
+```powershell
 pip install -r requirements.txt
+```
 
-# Start the server
+4. Ensure model files are present:
+- `RA_backend/RA_Ordinal_Classification/efficientnet_ordinal.pth` — PyTorch CORAL ordinal model
+- `RA_backend/model.weights.h5` — Keras ResNet50 weights (may be a full model or weights-only; see Troubleshooting)
+
+5. Run backend (loads both models on the `both_models` branch):
+
+```powershell
+# on both_models branch
 python app.py
 ```
 
-The backend will run on **http://localhost:5000**
-
-### 2. Start Frontend Development Server
-
-Open a **new terminal** and run:
+6. Start frontend (in a separate terminal):
 
 ```bash
-# Navigate to frontend folder
 cd RA_frontend
-
-# Install dependencies (first time only)
 npm install
-
-# Start development server
 npm run dev
 ```
 
-The frontend will run on **http://localhost:5173**
+Visit the frontend (default Vite port) to upload X‑rays and compare model outputs.
 
-### 3. Access the Application
+**Running in low‑memory deployment (Render free tier / Docker small instance)**
+- Use the `main` branch which includes the `ENABLE_RESNET` guard. In `render.yaml` we set `ENABLE_RESNET=false` to avoid loading TensorFlow/ResNet and keep memory usage small.
+- To deploy with only CORAL, ensure `ENABLE_RESNET=false` in the environment or Render settings.
 
-Open your browser and go to:
-**http://localhost:5173**
+**Model details**
+- CORAL Ordinal Model (PyTorch)
+  - Path: `RA_backend/RA_Ordinal_Classification/efficientnet_ordinal.pth`
+  - Architecture: EfficientNet backbone + CORAL ordinal head
+  - Output: Cumulative probabilities for 5 ordered classes (stages 0–4). The CORAL approach respects ordering and typically gives better ordinal performance than naive multiclass cross‑entropy.
 
-## How to Use
+- ResNet50 Multiclass Model (TensorFlow/Keras)
+  - Path: `RA_backend/model.weights.h5` (sometimes stored under `RA_Ordinal_Classification` depending on commit history)
+  - Architecture: ResNet50 backbone + custom top layers
+  - Output: Softmax probabilities across 5 classes (0–4)
+  - Note: Some `.h5` files contain an entire saved Keras model; others contain weights only. The backend tries to `keras.models.load_model()` first and, on failure, reconstructs the architecture and calls `load_weights()`.
 
-1. **Upload Image**: Click or drag-and-drop an X-ray image (PNG, JPG, JPEG)
-2. **Analyze**: Click the "Analyze Image" button
-3. **View Results**: See the predicted RA stage, severity level, and confidence score
+**API endpoints (backend)**
+- `GET /health` — healthcheck
+- `POST /predict/coral` — run CORAL model on uploaded image
+- `POST /predict/resnet` — run ResNet50 model on uploaded image (may be disabled on deployment)
+- `POST /predict/compare` — run both models and return side‑by‑side results
 
-## API Endpoints
+**Docker / Production**
+- A `Dockerfile` is provided in `RA_backend` for building a containerized backend. For production, use a WSGI server (gunicorn) and ensure sufficient memory when enabling both models.
 
-### Backend (http://localhost:5000)
+Example (build & run):
 
-- `GET /health` - Check server status
-- `POST /predict` - Upload image for prediction
-
-### Frontend Proxy
-
-The frontend development server automatically proxies `/predict` and `/health` requests to the backend.
-
-## Model Information
-
-- **Architecture**: EfficientNet-B0 with CORAL Ordinal Regression Head
-- **Framework**: PyTorch
-- **Input**: 224x224 RGB images
-- **Output**: 5 classes (Stages 0-4) of Rheumatoid Arthritis
-  - Stage 0: Normal
-  - Stage 1: Doubtful/Minimal
-  - Stage 2: Mild
-  - Stage 3: Moderate
-  - Stage 4: Severe
-- **Training Method**: CORAL (COnsistent RAnk Logits) ordinal regression
-  - Respects natural ordering of disease progression
-  - Adjacent stage errors penalized less than distant stage errors
-
-## Troubleshooting
-
-### Backend Issues
-
-**Model not loading:**
-- Verify `Best_EfficientNetB3.h5` is in the `RA_backend/` folder
-- Check file size is ~85MB
-- Ensure TensorFlow is installed correctly
-
-**Port 5000 already in use:**
-- Change port in `app.py` (line with `app.run()`)
-- Update proxy in `RA_frontend/vite.config.ts`
-
-### Frontend Issues
-
-**Cannot connect to backend:**
-- Ensure backend server is running on port 5000
-- Check console for CORS or network errors
-- Verify proxy configuration in `vite.config.ts`
-
-**Module not found errors:**
-```bash
-cd RA_frontend
-rm -rf node_modules package-lock.json
-npm install
+```powershell
+# from RA_backend
+docker build -t oa-backend:latest .
+# run with both models (local machine must have enough RAM)
+docker run --rm -p 5000:5000 -e PORT=5000 oa-backend:latest
 ```
 
-## Development
+**Troubleshooting**
+- Python version: if you get import/installation issues for `numpy` or `setuptools`, switch to Python 3.11 and recreate the virtualenv.
+- ResNet loading errors: the backend attempts to load a full model first; if `model.weights.h5` is weights‑only, ensure the expected architecture code exists and the weights file matches that architecture.
+- Out of memory (OOM): if the process fails on startup with OOM, set `ENABLE_RESNET=false` or use the `main` branch for deployment.
 
-### Backend Development
-- Flask runs in debug mode by default
-- Changes to `app.py` auto-reload the server
+**Branch workflow**
+- For deployment (Render/free tier): use `main` — more memory‑efficient.
+- For local full experiments and comparison: use `both_models` (contains both models loaded unconditionally).
 
-### Frontend Development
-- Vite provides hot module replacement
-- Changes appear instantly in the browser
+**Contributing & Notes**
+- This repository is intended for research/educational use. If you add new model checkpoints, document their paths and training details in `RA_backend/README.md` or this file.
 
-## Production Deployment
+**License & Disclaimer**
+This project is for educational and research purposes only. It is not a medical device. Do not use the predictions for clinical decision making; always consult qualified healthcare professionals.
 
-### Backend
-```bash
-# Use production WSGI server
-pip install gunicorn
-gunicorn -w 4 -b 0.0.0.0:5000 app:app
-```
-
-### Frontend
-```bash
-cd RA_frontend
-npm run build
-# Deploy the 'dist' folder to your hosting service
-```
-
-## Tech Stack
-
-### Backend
-- Python 3.x
-- Flask (Web framework)
-- PyTorch (Deep learning)
-- TorchVision (Image preprocessing)
-- Pillow (Image processing)
-- NumPy (Numerical operations)
-
-### Frontend
-- React 18
-- TypeScript
-- Vite (Build tool)
-- Tailwind CSS (Styling)
-- Lucide React (Icons)
-
-## License & Disclaimer
-
-This is a medical imaging AI tool for educational and research purposes. Always consult qualified healthcare professionals for medical decisions.
