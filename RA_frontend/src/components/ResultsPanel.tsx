@@ -53,8 +53,8 @@ export default function ResultsPanel({ result }: ResultsPanelProps) {
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
         <div className="bg-teal-50 rounded-lg p-4 border border-teal-200">
-          <p className="text-sm text-gray-600 mb-1">RA Stage</p>
-          <p className="text-3xl font-bold text-teal-600">Stage {result.grade}</p>
+          <p className="text-sm text-gray-600 mb-1">KL Grade</p>
+          <p className="text-3xl font-bold text-teal-600">Grade {result.grade}</p>
         </div>
 
         <div className={`rounded-lg p-4 border ${getSeverityColor(result.severity)}`}>
@@ -86,7 +86,7 @@ export default function ResultsPanel({ result }: ResultsPanelProps) {
 
       <div className="mt-4 p-4 bg-blue-50 border border-blue-200 rounded-lg">
         <p className="text-sm text-blue-800">
-          <strong>Note:</strong> This analysis is for informational purposes only and should not replace professional medical diagnosis. Please consult with a healthcare provider for proper evaluation.
+          <strong>Note:</strong> This analysis is for informational purposes only and should not replace professional medical diagnosis. For osteoarthritis management and treatment decisions, consult an orthopedic specialist or rheumatologist.
         </p>
       </div>
     </div>

@@ -10,17 +10,15 @@ export default function HomePage() {
         </div>
         
         <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-800 mb-6">
-          RA Detection System
+          Osteoarthritis Knee X-ray Classifier
         </h1>
         
         <p className="text-xl md:text-2xl text-gray-600 max-w-3xl mx-auto leading-relaxed mb-4">
-          Advanced AI-Powered Rheumatoid Arthritis Stage Detection
+          Advanced AI-Powered Osteoarthritis (Kellgren-Lawrence) Knee X-ray Classification
         </p>
         
         <p className="text-lg text-gray-500 max-w-2xl mx-auto">
-          Our cutting-edge deep learning model analyzes X-ray images to accurately classify 
-          rheumatoid arthritis severity stages, providing healthcare professionals with 
-          rapid, reliable diagnostic support.
+          Our deep learning model analyzes knee X-ray images to classify osteoarthritis using the Kellgren-Lawrence grading system, providing clinicians with fast, reliable support.
         </p>
       </div>
 
@@ -57,11 +55,10 @@ export default function HomePage() {
             <CheckCircle2 className="w-6 h-6 text-white" />
           </div>
           <h3 className="text-xl font-semibold text-gray-800 mb-2">
-            5-Stage Classification
+            Kellgren-Lawrence Grades (0-4)
           </h3>
           <p className="text-gray-600 leading-relaxed">
-            Comprehensive staging from normal (Stage 0) to severe RA (Stage 4) 
-            with detailed explanations and confidence scores.
+            Standard KL grading from Grade 0 (no radiographic OA) to Grade 4 (severe osteoarthritis), with explanations and confidence scores.
           </p>
         </div>
       </div>
@@ -79,7 +76,7 @@ export default function HomePage() {
             </div>
             <h3 className="text-lg font-semibold text-gray-800 mb-2">Upload X-ray</h3>
             <p className="text-gray-600">
-              Upload a clear X-ray image of hand or wrist joints in PNG, JPG, or JPEG format.
+              Upload a clear knee X-ray (AP or weight-bearing) in PNG, JPG, or JPEG format.
             </p>
           </div>
 
@@ -89,7 +86,7 @@ export default function HomePage() {
             </div>
             <h3 className="text-lg font-semibold text-gray-800 mb-2">AI Analysis</h3>
             <p className="text-gray-600">
-              Our deep learning model processes the image and identifies RA stage markers.
+              Our model analyzes radiographic features (osteophytes, joint space narrowing, sclerosis) and assigns a Kellgren-Lawrence grade.
             </p>
           </div>
 
@@ -108,16 +105,16 @@ export default function HomePage() {
       {/* Disease Stages Overview */}
       <div className="bg-gradient-to-br from-gray-50 to-gray-100 rounded-xl p-8 border border-gray-200">
         <h2 className="text-3xl font-bold text-gray-800 mb-6 text-center">
-          RA Stages Detected
+          Osteoarthritis Grades Detected (KL 0-4)
         </h2>
         
         <div className="space-y-3">
           {[
-            { stage: 0, severity: 'Normal', color: 'green', description: 'No signs of RA detected' },
-            { stage: 1, severity: 'Doubtful/Minimal', color: 'blue', description: 'Early possible signs' },
-            { stage: 2, severity: 'Mild', color: 'yellow', description: 'Periarticular osteoporosis and early erosions' },
-            { stage: 3, severity: 'Moderate', color: 'orange', description: 'Multiple erosions and joint space narrowing' },
-            { stage: 4, severity: 'Severe', color: 'red', description: 'Extensive joint destruction and deformity' },
+            { stage: 0, severity: 'Normal', color: 'green', description: 'No radiographic osteoarthritis (KL 0)' },
+            { stage: 1, severity: 'Doubtful', color: 'blue', description: 'Possible osteophyte formation (KL 1)' },
+            { stage: 2, severity: 'Mild', color: 'yellow', description: 'Definite osteophytes, possible joint space narrowing (KL 2)' },
+            { stage: 3, severity: 'Moderate', color: 'orange', description: 'Multiple osteophytes, definite joint space narrowing, sclerosis (KL 3)' },
+            { stage: 4, severity: 'Severe', color: 'red', description: 'Large osteophytes, severe joint space loss, deformity (KL 4)' },
           ].map((item) => (
             <div
               key={item.stage}

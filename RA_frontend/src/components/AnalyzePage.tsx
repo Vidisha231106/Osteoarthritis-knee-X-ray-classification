@@ -92,7 +92,7 @@ export default function AnalyzePage() {
           X-ray Image Analysis
         </h2>
         <p className="text-gray-600 text-lg">
-          Upload an X-ray image to detect and classify rheumatoid arthritis stages
+          Upload a knee X-ray image to detect and classify osteoarthritis using the Kellgren-Lawrence grading system
         </p>
       </div>
 

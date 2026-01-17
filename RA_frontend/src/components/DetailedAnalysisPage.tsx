@@ -10,11 +10,11 @@ export default function DetailedAnalysisPage() {
   const [error, setError] = useState<string | null>(null);
 
   const stages = [
-    { value: 0, label: 'Stage 0 - Normal', color: 'green' },
-    { value: 1, label: 'Stage 1 - Doubtful/Minimal', color: 'blue' },
-    { value: 2, label: 'Stage 2 - Mild', color: 'yellow' },
-    { value: 3, label: 'Stage 3 - Moderate', color: 'orange' },
-    { value: 4, label: 'Stage 4 - Severe', color: 'red' },
+    { value: 0, label: 'Grade 0 - Normal (KL 0)', color: 'green' },
+    { value: 1, label: 'Grade 1 - Doubtful (KL 1)', color: 'blue' },
+    { value: 2, label: 'Grade 2 - Mild (KL 2)', color: 'yellow' },
+    { value: 3, label: 'Grade 3 - Moderate (KL 3)', color: 'orange' },
+    { value: 4, label: 'Grade 4 - Severe (KL 4)', color: 'red' },
   ];
 
   const getDetailedInfo = async (stage: number) => {
@@ -29,14 +29,14 @@ export default function DetailedAnalysisPage() {
         return;
       }
 
-      const prompt = `Provide a detailed medical explanation about Rheumatoid Arthritis Stage ${stage} in approximately 500 words. Include:
-1. Clinical characteristics and symptoms
-2. Radiological findings (joint space, erosions, deformity)
-3. Typical patient presentation
-4. Disease progression implications
-5. Treatment approaches and management strategies
+      const prompt = `Provide a detailed medical explanation about Osteoarthritis (knee) Kellgren-Lawrence Grade ${stage} in approximately 500 words. Include:
+    1. Clinical characteristics and symptoms
+    2. Radiological findings (osteophytes, joint space narrowing, sclerosis)
+    3. Typical patient presentation
+    4. Disease progression implications and functional impact
+    5. Treatment approaches and management strategies (conservative, injections, surgical)
 
-Write in a professional medical tone suitable for healthcare providers.`;
+    Write in a professional medical tone suitable for healthcare providers.`;
 
       const response = await fetch(
         `https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${GEMINI_API_KEY}`,
@@ -65,106 +65,90 @@ Write in a professional medical tone suitable for healthcare providers.`;
   };
 
   const getStaticStageInfo = (stage: number): string => {
-    const stageInfo: Record<number, string> = {
-      0: `**Stage 0: Normal (No Rheumatoid Arthritis)**
+        const stageInfo: Record<number, string> = {
+      0: `**Grade 0 (KL 0): No Radiographic Osteoarthritis**
 
-Stage 0 represents the absence of rheumatoid arthritis on radiographic examination. In this stage, X-ray images show healthy joint architecture with no evidence of inflammatory changes or structural damage characteristic of RA.
+    Grade 0 indicates no radiographic evidence of osteoarthritis. Knee radiographs show preserved joint space without osteophytes, sclerosis, or joint deformity.
 
-**Clinical Characteristics:**
-Patients at Stage 0 show no clinical signs of rheumatoid arthritis. Joint function is completely normal, with no pain, swelling, stiffness, or limitation of movement. There are no systemic symptoms such as fatigue or morning stiffness associated with RA.
+    **Clinical Characteristics:**
+    Patients may be asymptomatic or have nonspecific knee discomfort not attributable to OA. There is no functional limitation related to osteoarthritis.
 
-**Radiological Findings:**
-Radiographs demonstrate normal joint space width, indicating intact cartilage. Bone density is uniform with no periarticular osteoporosis. Joint margins are smooth and well-defined with no erosions. The soft tissue shadow around joints appears normal without swelling or effusion.
+    **Radiological Findings:**
+    Radiographs appear normal with well-preserved joint space and smooth joint margins. No osteophytes, subchondral sclerosis, or cysts are present.
 
-**Significance:**
-This stage serves as a baseline for comparison in monitoring at-risk patients or those with a family history of RA. Regular screening may be recommended for individuals with elevated rheumatoid factor or anti-CCP antibodies despite normal imaging.
+    **Management:**
+    No OA-specific therapy is required. Emphasize general joint health: weight management, exercise, and injury prevention.`,
 
-**Management:**
-No treatment is required. However, patients with positive serological markers may benefit from lifestyle modifications, including smoking cessation, maintaining healthy weight, and regular exercise to reduce future RA risk.`,
+      1: `**Grade 1 (KL 1): Doubtful**
 
-      1: `**Stage 1: Doubtful/Minimal Rheumatoid Arthritis**
+    Grade 1 is characterized by doubtful joint space narrowing and possible osteophyte formation that may be subtle on radiographs.
 
-Stage 1 represents the earliest detectable changes in rheumatoid arthritis, where radiographic findings are subtle and diagnosis may be uncertain. This stage is characterized by minimal changes that may suggest early inflammatory arthritis.
+    **Clinical Characteristics:**
+    Patients may report intermittent knee pain, especially with activity, but signs and symptoms are often mild or nonspecific.
 
-**Clinical Characteristics:**
-Patients often present with vague symptoms including mild joint pain, subtle swelling, and brief morning stiffness lasting less than 30 minutes. Joint function is largely preserved, but patients may notice slight discomfort with prolonged activity. Systemic symptoms are typically absent or minimal.
+    **Radiological Findings:**
+    Small, doubtful osteophytes may be present. Joint space narrowing is minimal or uncertain. Subchondral changes are typically absent.
 
-**Radiological Findings:**
-X-rays may show periarticular soft tissue swelling, indicating joint inflammation. There may be very slight joint space narrowing, though this can be difficult to distinguish from normal variation. Periarticular osteoporosis may begin to appear around affected joints. No definite erosions are present at this stage.
+    **Management:**
+    Conservative measures: patient education, exercise programs (strengthening and low-impact aerobic), weight loss if overweight, and NSAIDs for symptomatic relief as needed. Monitor progression clinically and radiographically.`,
 
-**Disease Progression:**
-Early detection at Stage 1 is crucial as this represents a therapeutic window where aggressive treatment can potentially prevent progression to more advanced stages. Without treatment, many patients progress to Stage 2 within 1-2 years.
+      2: `**Grade 2 (KL 2): Mild Osteoarthritis**
 
-**Treatment Approach:**
-Early intervention with disease-modifying antirheumatic drugs (DMARDs), particularly methotrexate, is recommended. NSAIDs may be used for symptomatic relief. Low-dose corticosteroids can help control inflammation during DMARD initiation. Regular monitoring with imaging and laboratory tests is essential to assess treatment response.`,
+    Grade 2 shows definite osteophyte formation and possible joint space narrowing on radiographs.
 
-      2: `**Stage 2: Mild Rheumatoid Arthritis**
+    **Clinical Characteristics:**
+    Patients typically have activity-related knee pain, stiffness after rest, and occasional swelling. Functional limitations are usually mild to moderate.
 
-Stage 2 represents established rheumatoid arthritis with definite radiographic changes indicating ongoing joint damage. This stage shows clear evidence of inflammatory arthritis with structural changes that are still potentially reversible with aggressive treatment.
+    **Radiological Findings:**
+    Definite osteophytes at joint margins are visible; joint space narrowing may be present but not severe. Early subchondral sclerosis or cysts may be seen.
 
-**Clinical Characteristics:**
-Patients experience persistent joint pain and swelling, typically affecting multiple small joints symmetrically. Morning stiffness lasts more than 30 minutes, often extending to several hours. Joint function begins to decline with reduced grip strength and difficulty with fine motor tasks. Fatigue is common, and patients may experience low-grade fever during disease flares.
+    **Management:**
+    Nonoperative management is first-line: exercise and physical therapy, weight loss, analgesics/NSAIDs, activity modification, and consideration of intra-articular injections (e.g., corticosteroids or hyaluronic acid) for symptom control. Patient education about disease course is important.`,
 
-**Radiological Findings:**
-X-rays demonstrate periarticular osteoporosis around affected joints due to inflammatory hyperemia and disuse. Small marginal erosions become visible at joint margins, particularly in the metacarpophalangeal and proximal interphalangeal joints. Joint space narrowing is evident, indicating cartilage loss. Soft tissue swelling is pronounced around affected joints.
+      3: `**Grade 3 (KL 3): Moderate Osteoarthritis**
 
-**Disease Impact:**
-At this stage, patients begin experiencing functional limitations in daily activities. Work productivity may be affected, and patients often require assistance with tasks requiring fine manual dexterity. Quality of life starts to decline due to chronic pain and fatigue.
+    Grade 3 demonstrates multiple osteophytes, definite joint space narrowing, some sclerosis, and possible deformity.
 
-**Treatment Strategy:**
-Combination DMARD therapy is often required, typically methotrexate with hydroxychloroquine or sulfasalazine. Biologic agents (TNF inhibitors, IL-6 inhibitors) should be considered if conventional DMARDs fail. Corticosteroids may be used for bridging therapy. Physical and occupational therapy become important to maintain function. Regular monitoring every 3-6 months is essential.`,
+    **Clinical Characteristics:**
+    Patients experience persistent knee pain with significant activity limitation. Stiffness and intermittent swelling are common; walking long distances may be impaired.
 
-      3: `**Stage 3: Moderate Rheumatoid Arthritis**
+    **Radiological Findings:**
+    Multiple osteophytes, definite narrowing of the joint space, subchondral sclerosis, and possible bone cysts or malalignment are evident.
 
-Stage 3 represents advanced rheumatoid arthritis with extensive joint damage and functional impairment. This stage is characterized by substantial structural damage to multiple joints with visible deformity and significant disability.
+    **Management:**
+    Enhanced conservative care: structured physical therapy, bracing if indicated, targeted weight loss, and optimized analgesic strategies. Consider orthobiologic injections selectively. Referral to orthopedics for consideration of surgical options (arthroscopy is generally limited in OA) may be appropriate in refractory cases.`,
 
-**Clinical Characteristics:**
-Patients experience severe, persistent joint pain and marked swelling affecting multiple joints. Morning stiffness typically lasts several hours. Joint deformities become apparent, including ulnar deviation of fingers, boutonnière deformity, and swan-neck deformity. Range of motion is significantly reduced. Muscle atrophy develops due to disuse. Systemic manifestations may include subcutaneous nodules, anemia, and fatigue.
+      4: `**Grade 4 (KL 4): Severe Osteoarthritis**
 
-**Radiological Findings:**
-X-rays show extensive erosive changes at joint margins with multiple erosions present. Marked joint space narrowing indicates severe cartilage loss. Periarticular osteoporosis is pronounced. Subluxation of joints may be visible, particularly in the metacarpophalangeal joints. Soft tissue changes include chronic swelling and muscle wasting.
+    Grade 4 indicates severe radiographic osteoarthritis with large osteophytes, marked joint space loss, severe sclerosis, and deformity.
 
-**Functional Impact:**
-Significant disability affects daily living activities. Patients struggle with basic self-care tasks such as dressing, eating, and personal hygiene. Work capacity is severely compromised, and many patients are unable to continue employment. Assistive devices and home modifications become necessary.
+    **Clinical Characteristics:**
+    Patients have severe pain at rest and with activity, major functional impairment, and limited mobility. Quality of life is often substantially reduced.
 
-**Treatment Approach:**
-Aggressive combination therapy with biologic or targeted synthetic DMARDs is essential. Options include TNF inhibitors, rituximab, abatacept, tocilizumab, or JAK inhibitors. Pain management becomes critical, requiring analgesics and sometimes opioids. Surgical interventions such as synovectomy or joint fusion may be considered for severely affected joints. Comprehensive rehabilitation including physical therapy, occupational therapy, and psychological support is vital. Monitoring should occur every 2-3 months.`,
+    **Radiological Findings:**
+    Large osteophytes, marked joint space narrowing or obliteration, significant subchondral sclerosis, bone cysts, and malalignment or deformity.
 
-      4: `**Stage 4: Severe Rheumatoid Arthritis**
+    **Management:**
+    When conservative measures fail, surgical management such as total knee arthroplasty is commonly indicated to relieve pain and restore function. Preoperative optimization, multidisciplinary care, and postoperative rehabilitation are essential for good outcomes.`,
+        };
 
-Stage 4 represents the most advanced form of rheumatoid arthritis with terminal joint destruction and severe disability. This stage is characterized by end-stage arthritis with extensive joint damage, deformity, and ankylosis.
-
-**Clinical Characteristics:**
-Patients experience chronic, severe pain that may persist even at rest. Multiple joints show fixed deformities and ankylosis (fusion). Range of motion is extremely limited or completely lost in affected joints. Severe muscle atrophy and weakness are present throughout affected limbs. Systemic complications may include rheumatoid vasculitis, interstitial lung disease, and cardiovascular disease. Depression and anxiety are common due to severe disability.
-
-**Radiological Findings:**
-X-rays reveal extensive bone erosions with complete loss of joint architecture. Joint spaces are markedly narrowed or completely obliterated. Fibrous or bony ankylosis may be present, showing complete fusion of joint surfaces. Severe subluxation and dislocation of joints are visible. Osteoporosis is widespread, increasing fracture risk. Soft tissue calcification may be present.
-
-**Functional Impact:**
-Patients are severely disabled and dependent on others for most activities of daily living. Self-care is impossible without assistance. Mobility is extremely limited, often requiring wheelchair or complete bed rest. Employment is not possible. Quality of life is profoundly impacted, with patients experiencing significant physical and psychological distress.
-
-**Treatment Strategy:**
-At this stage, focus shifts to symptom management and maximizing remaining function. Biologic therapy may still be beneficial to prevent further damage and reduce inflammation. Pain management requires multimodal approach including NSAIDs, opioids, and adjuvant analgesics. Surgical options include total joint arthroplasty (replacement) for major joints like knees and hips, which can significantly improve function and quality of life. Arthrodesis (joint fusion) may be performed for smaller joints to provide stability and reduce pain. Comprehensive supportive care including physical therapy, occupational therapy, psychological counseling, and social support services is essential. Palliative care principles should be integrated to address quality of life, pain management, and psychosocial needs.`,
-    };
-
-    return stageInfo[stage] || 'Information not available.';
+        return stageInfo[stage] || 'Information not available.';
   };
 
   return (
     <div className="animate-fadeIn">
       <div className="text-center mb-8">
         <h2 className="text-3xl md:text-4xl font-bold text-gray-800 mb-4">
-          Detailed RA Stage Analysis
+          Detailed Osteoarthritis (KL) Grade Analysis
         </h2>
         <p className="text-gray-600 text-lg max-w-2xl mx-auto">
-          Select a stage below to view comprehensive medical information about rheumatoid arthritis 
-          progression, clinical findings, and treatment approaches.
+          Select a grade below to view comprehensive medical information about knee osteoarthritis, radiographic findings, and management.
         </p>
       </div>
 
       {/* Stage Selection */}
       <div className="bg-white rounded-xl shadow-lg p-6 mb-8 border border-gray-100">
-        <h3 className="text-xl font-semibold text-gray-800 mb-4">Select RA Stage</h3>
+        <h3 className="text-xl font-semibold text-gray-800 mb-4">Select KL Grade</h3>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3">
           {stages.map((stage) => (
             <button

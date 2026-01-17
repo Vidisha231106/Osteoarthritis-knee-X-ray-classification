@@ -1,4 +1,4 @@
-# RA Detection System - Frontend Updates
+# Osteoarthritis Knee X-ray Classifier - Frontend Updates
 
 ## 🎨 New Features
 
@@ -8,7 +8,7 @@
    - Landing page with project introduction
    - Feature highlights (Fast Analysis, Clinically Meaningful, 5-Stage Classification)
    - How It Works section
-   - RA Stages overview
+   - KL grade (0-4) overview for knee osteoarthritis
    - Medical disclaimer
 
 2. **Analyze Page**
@@ -18,7 +18,7 @@
    - Fixed confidence percentage display (now shows correct %)
 
 3. **Detailed Analysis Page**
-   - Comprehensive medical information for each RA stage
+   - Comprehensive medical information for each Kellgren-Lawrence grade (knee OA)
    - Optional Google Gemini API integration for AI-generated content
    - Fallback to detailed static content if no API key
    - 500-word detailed explanations covering:
@@ -84,7 +84,7 @@ src/
 1. ✅ **Fixed Confidence Display**: Now correctly shows percentage (was multiplying by 100 twice)
 2. ✅ **Tab Navigation**: Clean, modern tab interface
 3. ✅ **Landing Page**: Professional introduction to the system
-4. ✅ **Detailed Medical Info**: Comprehensive RA stage explanations
+4. ✅ **Detailed Medical Info**: Comprehensive Osteoarthritis (KL) grade explanations for the knee
 5. ✅ **Google Fonts**: Inter and Poppins for elegant typography
 6. ✅ **Smooth Animations**: Enhanced user experience with transitions
 7. ✅ **Responsive**: Works on desktop, tablet, and mobile
