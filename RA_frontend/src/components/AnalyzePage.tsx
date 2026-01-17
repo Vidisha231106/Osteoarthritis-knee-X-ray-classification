@@ -59,8 +59,12 @@ export default function AnalyzePage() {
     const formData = new FormData();
     formData.append('file', selectedFile);
 
+    // Use API URL from environment variable or default to local proxy
+    const apiUrl = import.meta.env.VITE_API_URL || '';
+    const endpoint = `${apiUrl}/predict`;
+
     try {
-      const response = await fetch('/predict', {
+      const response = await fetch(endpoint, {
         method: 'POST',
         body: formData,
       });

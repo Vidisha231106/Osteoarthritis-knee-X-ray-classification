@@ -196,7 +196,8 @@ def predict():
 def index():
     """Root endpoint"""
     return jsonify({
-        'message': 'RA Detection API',
+        'message': 'Osteoarthritis Knee X-ray Classification API',
+        'version': '1.0.0',
         'endpoints': {
             '/health': 'GET - Health check',
             '/predict': 'POST - Upload image for prediction'
@@ -206,6 +207,8 @@ def index():
 
 if __name__ == '__main__':
     # Run the Flask app
-    print("🚀 Starting RA Detection API Server...")
+    port = int(os.environ.get('PORT', 5000))
+    print("🚀 Starting Osteoarthritis Detection API Server...")
     print(f"📁 Model path: {MODEL_PATH}")
-    app.run(host='0.0.0.0', port=5000, debug=True)
+    print(f"🌐 Port: {port}")
+    app.run(host='0.0.0.0', port=port, debug=False)
