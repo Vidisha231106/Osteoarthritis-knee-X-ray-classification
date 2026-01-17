@@ -61,43 +61,55 @@ except Exception as e:
     coral_model = None
 
 # ==================== ResNet50 Model (TensorFlow/Keras) ====================
-try:
-    # Try to load the complete model first (if .h5 contains architecture + weights)
+# Optional: disable ResNet50 to reduce memory usage (set ENABLE_RESNET=false in env)
+ENABLE_RESNET = os.environ.get('ENABLE_RESNET', 'true').lower() == 'true'
+
+if ENABLE_RESNET and os.path.exists(RESNET_MODEL_PATH):
     try:
-        resnet_model = keras.models.load_model(RESNET_MODEL_PATH, compile=False)
-        print(f"✅ ResNet50 TensorFlow model loaded successfully from {RESNET_MODEL_PATH}")
-    except Exception as load_err:
-        # If that fails, try loading as weights-only with matching architecture
-        print(f"⚠️  Full model load failed, attempting weights-only load: {load_err}")
-        
-        # Build the ResNet50 + Custom CNN architecture (weights-only mode)
-        base_model = keras.applications.ResNet50(
-            weights='imagenet',  # Use pretrained weights as base
-            include_top=False,
-            input_shape=(224, 224, 3)
-        )
-        
-        # Build the full model architecture
-        x = base_model.output
-        x = keras.layers.GlobalAveragePooling2D()(x)
-        x = keras.layers.Dense(512, activation='relu')(x)
-        x = keras.layers.Dropout(0.5)(x)
-        x = keras.layers.Dense(256, activation='relu')(x)
-        x = keras.layers.Dropout(0.3)(x)
-        outputs = keras.layers.Dense(NUM_CLASSES, activation='softmax')(x)
-        
-        resnet_model = keras.Model(inputs=base_model.input, outputs=outputs)
-        
-        # Try to load weights with skip_mismatch
+        # Try to load the complete model first (if .h5 contains architecture + weights)
         try:
-            resnet_model.load_weights(RESNET_MODEL_PATH, skip_mismatch=True)
-            print(f"✅ ResNet50 model loaded with skip_mismatch from {RESNET_MODEL_PATH}")
-        except:
-            print(f"⚠️  Using base ResNet50 with ImageNet weights (custom weights incompatible)")
+            resnet_model = keras.models.load_model(RESNET_MODEL_PATH, compile=False)
+            print(f"✅ ResNet50 TensorFlow model loaded successfully from {RESNET_MODEL_PATH}")
+        except Exception as load_err:
+            # If that fails, try loading as weights-only with matching architecture
+            print(f"⚠️  Full model load failed, attempting weights-only load: {load_err}")
             
-except Exception as e:
-    print(f"❌ Error loading ResNet50 model: {e}")
+            # Build the ResNet50 + Custom CNN architecture (weights-only mode)
+            # Use weights=None to avoid downloading ImageNet weights (saves memory & time)
+            base_model = keras.applications.ResNet50(
+                weights=None,
+                include_top=False,
+                input_shape=(224, 224, 3)
+            )
+            
+            # Build the full model architecture
+            x = base_model.output
+            x = keras.layers.GlobalAveragePooling2D()(x)
+            x = keras.layers.Dense(512, activation='relu')(x)
+            x = keras.layers.Dropout(0.5)(x)
+            x = keras.layers.Dense(256, activation='relu')(x)
+            x = keras.layers.Dropout(0.3)(x)
+            outputs = keras.layers.Dense(NUM_CLASSES, activation='softmax')(x)
+            
+            resnet_model = keras.Model(inputs=base_model.input, outputs=outputs)
+            
+            # Try to load weights with skip_mismatch
+            try:
+                resnet_model.load_weights(RESNET_MODEL_PATH, skip_mismatch=True)
+                print(f"✅ ResNet50 model loaded with skip_mismatch from {RESNET_MODEL_PATH}")
+            except Exception as weights_err:
+                print(f"❌ Failed to load ResNet50 weights: {weights_err}")
+                resnet_model = None
+                
+    except Exception as e:
+        print(f"❌ Error loading ResNet50 model: {e}")
+        resnet_model = None
+else:
     resnet_model = None
+    if not ENABLE_RESNET:
+        print(f"ℹ️  ResNet50 model disabled (ENABLE_RESNET=false)")
+    else:
+        print(f"⚠️  ResNet50 model file not found: {RESNET_MODEL_PATH}")
 
 # PyTorch Image preprocessing transform (for CORAL model)
 pytorch_transform = transforms.Compose([

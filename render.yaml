@@ -12,6 +12,10 @@ services:
         value: 10000
       - key: PYTHONUNBUFFERED
         value: 1
+      - key: ENABLE_RESNET
+        value: false  # Disable ResNet50 to fit in 512MB (set to 'true' on paid plans with 1GB+ RAM)
+      - key: TF_CPP_MIN_LOG_LEVEL
+        value: 2
 
   # Frontend service
   - type: web
