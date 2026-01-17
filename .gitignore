@@ -1,0 +1,3 @@
+# Ignore nested-repo backups
+RA_backend/.git_backup/
+RA_backend/.git/
