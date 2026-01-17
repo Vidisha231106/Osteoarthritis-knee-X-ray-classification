@@ -9,9 +9,20 @@ import os
 import sys
 
 # Add RA_Ordinal_Classification src to path
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), 'RA_Ordinal_Classification', 'src'))
+project_root = os.path.dirname(os.path.abspath(__file__))
+src_path = os.path.join(project_root, 'RA_Ordinal_Classification', 'src')
+if src_path not in sys.path:
+    sys.path.insert(0, src_path)
 
-from model import EfficientNetOrdinal, coral_predict
+try:
+    from model import EfficientNetOrdinal, coral_predict
+except ImportError as e:
+    print(f"❌ Import error: {e}")
+    print(f"📁 Current directory: {os.getcwd()}")
+    print(f"📁 Project root: {project_root}")
+    print(f"📁 Src path: {src_path}")
+    print(f"📁 Sys path: {sys.path}")
+    raise
 
 app = Flask(__name__)
 CORS(app)  # Enable CORS for React frontend

@@ -23,3 +23,7 @@ ENV
 README.md
 .DS_Store
 *.log
+RA_Ordinal_Classification/.git
+RA_Ordinal_Classification/.gitignore
+RA_Ordinal_Classification/notebooks
+RA_Ordinal_Classification/results
