@@ -21,6 +21,17 @@ except ImportError as e:
     print(f"📁 Current directory: {os.getcwd()}")
     print(f"📁 Project root: {project_root}")
     print(f"📁 Src path: {src_path}")
+    print(f"📁 Src path exists: {os.path.exists(src_path)}")
+    
+    # List files in src directory
+    if os.path.exists(src_path):
+        print(f"📁 Files in src: {os.listdir(src_path)}")
+    
+    # List files in RA_Ordinal_Classification
+    ra_path = os.path.join(project_root, 'RA_Ordinal_Classification')
+    if os.path.exists(ra_path):
+        print(f"📁 Files in RA_Ordinal_Classification: {os.listdir(ra_path)}")
+    
     print(f"📁 Sys path: {sys.path}")
     raise
 
