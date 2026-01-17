@@ -3,8 +3,8 @@ services:
   - type: web
     name: oa-backend
     env: docker
-    dockerfilePath: ./RA_backend/Dockerfile
-    dockerContext: ./RA_backend
+    dockerfilePath: RA_backend/Dockerfile
+    dockerContext: RA_backend
     plan: starter # Change to 'standard' or higher for better performance
     healthCheckPath: /health
     envVars:
@@ -17,8 +17,8 @@ services:
   - type: web
     name: oa-frontend
     env: docker
-    dockerfilePath: ./RA_frontend/Dockerfile
-    dockerContext: ./RA_frontend
+    dockerfilePath: RA_frontend/Dockerfile
+    dockerContext: RA_frontend
     plan: starter
     envVars:
       - key: VITE_API_URL
