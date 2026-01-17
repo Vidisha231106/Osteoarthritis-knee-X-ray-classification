@@ -1,0 +1,14 @@
+# Ignore dataset
+data/
+
+# Ignore model files
+saved_models/
+
+# Ignore hidden/cache files
+__pycache__/
+.ipynb_checkpoints/
+.DS_Store
+
+# Ignore log or temp files
+*.ckpt
+*.log
