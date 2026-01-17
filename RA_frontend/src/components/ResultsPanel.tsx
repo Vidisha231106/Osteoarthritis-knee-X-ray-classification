@@ -44,7 +44,8 @@ export default function ResultsPanel({ result }: ResultsPanelProps) {
     }
   };
 
-  const confidencePercentage = Math.round(result.confidence * 100);
+  // Confidence is already a percentage from the backend
+  const confidencePercentage = Math.round(result.confidence);
 
   return (
     <div className="w-full bg-white rounded-lg shadow-lg p-6 animate-fadeIn">
