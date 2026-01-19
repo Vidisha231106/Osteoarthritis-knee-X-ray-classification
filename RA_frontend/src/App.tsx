@@ -17,11 +17,11 @@ function App() {
           <div className="flex items-center justify-center gap-3 mb-4">
             <Activity className="w-12 h-12 text-teal-600" />
             <h1 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-teal-600 to-cyan-600 bg-clip-text text-transparent">
-              Osteoarthritis Knee X-ray Classifier
+              Rheumatoid Arthritis X-ray Classifier
             </h1>
           </div>
           <p className="text-gray-600 text-lg">
-            AI-Powered Osteoarthritis (Kellgren-Lawrence) Knee X-ray Classification
+            AI-Powered Rheumatoid Arthritis X-ray Classification
           </p>
         </header>
 
@@ -41,7 +41,7 @@ function App() {
           <p className="mb-2">Medical image analysis powered by advanced AI technology</p>
           <p>Always consult with healthcare professionals for medical decisions</p>
           <p className="mt-4 text-xs text-gray-400">
-            © 2026 Osteoarthritis Knee X-ray Classifier • Dual Model: CORAL + ResNet50
+            © 2026 Rheumatoid Arthritis X-ray Classifier • Dual Model: CORAL + ResNet50
           </p>
         </footer>
       </div>
